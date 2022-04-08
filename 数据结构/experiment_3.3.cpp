@@ -60,9 +60,9 @@ void swap(Heap H, int i, int j) {
     swap(H->data[i], H->data[j]);
 }
 void increase(Heap H, int i, ElementType x) {
-    if (H->data[i] > x) {
+    if (H->data[i] < x) {
         H->data[i] = x;
-        while ((H->data[parent(i)] < H->data[i]) && (i != 0)) {
+        while ((H->data[parent(i)] < H->data[i]) && (i != 1)) {
             swap(H, i, parent(i));
             i = parent(i);
         }
@@ -72,7 +72,7 @@ int insert(Heap H, ElementType x) {
     if (full(H)) return 0;
     int cur = ++H->size;
     H->data[cur] = x;
-    while ((H->data[parent(cur)] < H->data[cur]) && (cur != 0)) {
+    while ((H->data[parent(cur)] < H->data[cur]) && (cur != 1)) {
         swap(H, cur, parent(cur));
         cur = parent(cur);
     }
@@ -93,8 +93,14 @@ void initHeap(Heap H, ElementType data[], int n) {
         insert(H, data[i]);
     }
 }
-void  heapSort(Heap H){
-
+void heapSort(Heap H) {
+    int n = H->size;
+    for (int i = n; i > 1; --i) {
+        swap(H, 1, i);
+        H->size--;
+        heapify(H, 1);
+    }
+    H->size = n;
 }
 void destroyHeap(Heap H){
     delete [] H->data;

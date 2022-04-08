@@ -33,6 +33,8 @@ int right(int i);
 void swap(Heap H, int i, int j);
 void heapify(Heap H,int i);
 void initHeap(Heap H,Node data[],int n);
+ElementType front(Heap H);
+void push(Heap H,ElementType x);
 
 int main()
 {
@@ -64,7 +66,7 @@ void heapify(Heap H,int i) {
         swap(H, i, smallest);
         i = smallest;
     }
-}
+}//?
 void initHeap(Heap H,Node data[],int n) {
     for (int i = 1; i <= n; i++) {
         HuffmanTree p = new HTNode;
@@ -78,6 +80,17 @@ void initHeap(Heap H,Node data[],int n) {
             swap(H, l, parent(l));
             l >>= 1;
         }
-        heapify(H, i);
+        heapify(H, 1);
+    }
+}
+ElementType front(Heap H){
+    return H->data[1];
+}
+void push(Heap H,ElementType x) {
+    int cur = ++H->size;
+    H->data[cur] = x;
+    while (H->data[cur] < (H->data[parent(cur)]) && (cur != 1)) {
+        swap(H, cur, parent(cur));
+        cur = parent(cur);
     }
 }

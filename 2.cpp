@@ -1,24 +1,36 @@
 #include "bits/stdc++.h"
 using namespace std;
-long long n;
-__int128 arr[70];
-__int128 qpow(__int128 a, __int128 n) {
-    int ans = 1;
-    while (n) {
-        if (n & 1)ans *= a;
-        a *= a;
-        n >>= 1;
-    }
-    return ans;
-}
+int n,k,x;
+vector<int> arr;
 int main() {
-    for (int i = 1; i <= 64; ++i)
-        arr[i]= qpow(2,i);
-    while(cin>>n){
-        int i=1;
-        while(arr[i]<n)i++;
-        long long ans=(arr[i]-n)<(n-arr[i-1])?(arr[i]-n):(n-arr[i-1]);
-        cout<<ans<<endl;
+    cin >> n >> k >> x;
+    int sum = 0, cnt = 0,tmp;
+    for (int i = 0; i < n; ++i) {
+        cin >> tmp;
+        arr.emplace_back(tmp);
     }
+    for (int i = n - 1; i >= 0; --i) {
+        if (cnt < k) {
+            if(arr[i]>x){
+                int m=arr[i]/x;
+                if(cnt+m>k){
+                    arr[i]-=(k-cnt)*x;
+                    cnt=k;
+                }else {
+                    arr[i]-=m*x;
+                    cnt+=m;
+                }
+            }
+        }
+    }
+    sort(arr.begin(), arr.end());
+    for (int i = n-1; i >=0 ; --i) {
+        if(k==cnt){
+            sum+=arr[i];
+        }else{
+            cnt++;
+        }
+    }
+    cout<<sum<<endl;
     return 0;
 }

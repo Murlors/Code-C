@@ -27,5 +27,5 @@ Set createSet(int size) {
     return S;
 }
 void initSet(Set S){
-
+    for (int i = 0; i < S->size; i++) S->parent[i] = i-1;
 }
