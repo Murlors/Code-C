@@ -1,82 +1,34 @@
-#include<bits/stdc++.h>
-
-const int maxn = 1e6 + 1;
-
-inline int read()
-{
-    register int x = 0, ch = getchar(), f = 1;
-    while(!isdigit(ch)){if(ch == '-') f = -1; ch = getchar();}
-    while(isdigit(ch)) x = x * 10 + ch - '0', ch = getchar();
-    return x * f;
+#include "bits/stdc++.h"
+using namespace std;
+int n, m, k, x, y;
+vector<int> s;
+int finds(int x) {
+    if (s[x] != x) s[x] = finds(s[x]);
+    return s[x];
 }
-
-int n, m;
-
-struct node{
-    int u;
-    int v;
-    int w;
-}e[maxn];
-
-int fa[maxn], cnt, sum, num;
-
-void add(int x, int y, int w)
-{
-    e[++ cnt].u = x;
-    e[cnt].v = y;
-    e[cnt].w = w;
+void merges(int a, int b) {
+    int fa = finds(a), fb = finds(b);
+    if (fa != fb) s[fa] = fb;
 }
-
-bool cmp(node x, node y)
-{
-    return x.w < y.w;
+bool issame(int a, int b) {
+    int fa = finds(a), fb = finds(b);
+    return fa == fb;
 }
-
-int find(int x)
-{
-    return fa[x] == x ? fa[x] : fa[x] = find(fa[x]);//路径压缩
-}
-
-/*
-int find(int x)
-{
-	if(fa[x] == x) return x;
-  	else
-	{
-   		 fa[x] = find(fa[x]);//路径压缩
-   		 return fa[x];
-    	}
-}
-*/
-
-void kruskal()
-{
-    for(int i = 1; i <= cnt; i ++)
-    {
-        int x = find(e[i].u);
-        int y = find(e[i].v);
-        if(x == y) continue;
-        fa[x] = y;
-        sum += e[i].w;
-        if(++ num == n - 1) break;//如果构成了一颗树
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    cin >> n >> m;
+    for (int i = 0; i < n; ++i) s.push_back(i);
+    for (int i = 0; i < m; ++i) {
+        cin >> x >> y;
+        merges(x, y);
     }
-}
-
-int main()
-{
-    n = read();
-    m = read();
-    for(int i = 1; i <= n; i ++) fa[i] = i;
-    while(m --)
-    {
-        int x, y, w;
-        x = read();
-        y = read();
-        w = read();
-        add(x, y, w);
+    cin >> k;
+    for (int i = 0; i < k; ++i) {
+        cin >> x >> y;
+        if (issame(x, y))cout << "yes" << endl;
+        else cout << "no" << endl;
     }
-    std:: sort(e + 1, e + 1 + cnt, cmp);
-    kruskal();
-    printf("%d",sum);
     return 0;
 }

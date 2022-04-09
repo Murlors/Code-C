@@ -10,7 +10,9 @@ typedef struct
 
 Set createSet(int size);
 void initSet(Set S);
-
+int findSet(Set S, int x);
+void unionSet(Set S, int x, int y);
+void destroySet(Set S);
 int main()
 {
     /*此处代码由测试程序自动添加，主要为了向顺序表中插入数据
@@ -28,4 +30,17 @@ Set createSet(int size) {
 }
 void initSet(Set S){
     for (int i = 0; i < S->size; i++) S->parent[i] = i-1;
+}
+int findSet(Set S, int x) {
+    if (S->parent[x] != -1) S->parent[x] = findSet(S, S->parent[x]);
+    else return x;
+    return S->parent[x];
+}
+void unionSet(Set S, int x, int y) {
+    int a = findSet(S, x), b = findSet(S, y);
+    if (a != b) S->parent[a] = b;
+}
+void destroySet(Set S) {
+    delete[] S->parent;
+    delete S;
 }
