@@ -41,8 +41,8 @@ int hw(int i) {
     }
 }
 int main() {
-    cin >> t;
-    while (t--) {
+    cin >> Edge;
+    while (Edge--) {
         cin>>n>>str;
         cnt=0;
         int i=0;

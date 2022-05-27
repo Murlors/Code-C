@@ -3,11 +3,11 @@ using namespace std;
 int n, m, s[5001], cnt;
 bool flag[5001];
 long long sum;
-struct t {
+struct Edge {
     int x, y, z;
 } tmp;
-vector<t> arr;
-bool cmp(const t a, const t b) {
+vector<Edge> edges;
+bool cmp(const Edge a, const Edge b) {
     return a.z < b.z;
 }
 int finds(int x) {
@@ -35,12 +35,12 @@ int main() {
         cin >> tmp.x >> tmp.y >> tmp.z;
         if (!flag[tmp.x])flag[tmp.x] = true;
         if (!flag[tmp.y])flag[tmp.y] = true;
-        arr.emplace_back(tmp);
+        edges.emplace_back(tmp);
     }
-    sort(arr.begin(), arr.end(), cmp);
+    sort(edges.begin(), edges.end(), cmp);
     for (int i = 1; i <= n; ++i) s[i] = i;
     for (int i = 0; i < m; ++i) {
-        if (merges(arr[i].x, arr[i].y)) sum += arr[i].z;
+        if (merges(edges[i].x, edges[i].y)) sum += edges[i].z;
         if (cnt == n - 1) break;
     }
     if (cnt < n - 1) goto error;

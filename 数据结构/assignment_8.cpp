@@ -124,70 +124,58 @@ int degree(Graph g, VertexType v) {
     }
     return d;
 }
+int deledge(Graph g,VertexType i,VertexType j) {
+    ENode *pre, *p, *temp;
+    p = g->vexs[i].firstEdge;
+    if (p != NULL) {
+        if (p->adjVertex == j) {
+            temp = p;
+            g->vexs[i].firstEdge = p->nextEdge;
+            delete temp;
+            return 1;
+        } else {
+            pre = p;
+            p = p->nextEdge;
+            while (p != NULL && p->adjVertex != j) {
+                pre = p;
+                p = p->nextEdge;
+            }
+            if (p != NULL) {
+                pre->nextEdge = p->nextEdge;
+                delete temp;
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
 void delEdge(Graph g,VertexType x,VertexType y) {
-    int a = locateVertex(g, x), b = locateVertex(g, y);
-    if (a == -1 || b == -1)return;
-    if (g->vexs[a].firstEdge == NULL || g->vexs[b].firstEdge == NULL)return;
-    if (g->vexs[a].firstEdge->nextEdge != NULL) {
-        if (g->vexs[b].firstEdge->nextEdge != NULL) {
-            ENode *pa = g->vexs[a].firstEdge, *pre_a;
-            while (pa != NULL) {
-                if (pa->adjVertex == b) {
-                    if(pa->nextEdge!=NULL)pre_a->nextEdge = pa->nextEdge;
-                    else pre_a->nextEdge=NULL;
-                    delete pa;
-                    ENode *pb = g->vexs[b].firstEdge, *pre_b;
-                    while (pb != NULL) {
-                        if (pb->adjVertex == a) {
-                            if(pb->nextEdge!=NULL)pre_b->nextEdge = pb->nextEdge;
-                            else pre_b->nextEdge=NULL;
-                            delete pb;
-                            return;
-                        }
-                        pre_b = pb;
-                        pb = pb->nextEdge;
-                    }
-                }
-                pre_a = pa;
-                pa = pa->nextEdge;
-            }
-        } else {
-            ENode *pb = g->vexs[b].firstEdge;
-            g->vexs[b].firstEdge = NULL;
-            delete pb;
-        }
-    } else {
-        ENode *pa = g->vexs[a].firstEdge;
-        g->vexs[a].firstEdge = NULL;
-        delete pa;
-        if (g->vexs[b].firstEdge->nextEdge != NULL) {
-            ENode *pb = g->vexs[b].firstEdge, *pre_b;
-            while (pb != NULL) {
-                if (pb->adjVertex == a) {
-                    if(pb->nextEdge!=NULL)pre_b->nextEdge = pb->nextEdge;
-                    else pre_b->nextEdge=NULL;
-                    delete pb;
-                    return;
-                }
-                pre_b = pb;
-                pb = pb->nextEdge;
-            }
-        } else {
-            ENode *pb = g->vexs[b].firstEdge;
-            g->vexs[b].firstEdge = NULL;
-            delete pb;
-        }
-    }
-}//?
+    int i = locateVertex(g, x), j = locateVertex(g, y);
+    if (i == -1 || j == -1 || i == j) return;
+    int k = deledge(g, i, j);
+    deledge(g, j, i);
+    if (k == 1) g->edgeNum--;
+}
 void delVertex(Graph g, VertexType v) {
-    int a = locateVertex(g, v);
-    ENode *p = g->vexs[a].firstEdge;
-    while (p!=NULL){
-        delEdge(g,a,p->adjVertex);
-        p=p->nextEdge;
+    int k, j;
+    k = locateVertex(g, v);
+    if (k == -1)return;
+    ENode *p = g->vexs[k].firstEdge;
+    while (p != NULL) {
+        j = p->adjVertex;
+        p = p->nextEdge;
+        delEdge(g, v, g->vexs[j].data);
     }
-
-}//?
+    g->vexs[k].firstEdge = g->vexs[g->vertexNum - 1].firstEdge;
+    g->vexs[k].data = g->vexs[g->vertexNum - 1].data;
+    for (int i = 0; i < g->vertexNum; i++) {
+        for (p = g->vexs[i].firstEdge; p != NULL; p = p->nextEdge) {
+            if (p->adjVertex == g->vertexNum - 1)
+                p->adjVertex = k;
+        }
+    }
+    g->vertexNum--;
+}
 void DFS(Graph g, int i) {
     ENode *p = g->vexs[i].firstEdge;
     while (p != NULL) {

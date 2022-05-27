@@ -39,7 +39,7 @@ int main() {
     build(1, 1, n);
     for (int i = 0; i < m; ++i) {
         cin >> a >> b;
-        query()
+        query(1, 1, n);
     }
     return 0;
 }

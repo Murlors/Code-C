@@ -58,9 +58,9 @@ int query(int u, int v, int l, int r, int i) {
 int main() {
     n = read(), m = read(), tot = 0;
     for (int i = 1; i <= n; i++) {
-        k = read(),t = read();
+        k = read(), Edge = read();
         a[i].first = b[i].first = i;
-        a[i].second = b[i].second = k * 100000 + 100000 - t;
+        a[i].second = b[i].second = k * 100000 + 100000 - Edge;
     }
     sort(b + 1, b + n + 1,cmp());
     root[0] = build(1, n);
