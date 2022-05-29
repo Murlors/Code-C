@@ -41,12 +41,26 @@ void event(AOENetwork g);
 int active(AOENetwork g);
 int pathNum(AOENetwork g);
 
-int main()
-{
+int main() {
     /*此处代码由测试程序自动添加，主要为了向顺序表中插入数据
 	并输出数据,你无需关心此处代码的具体实现细节。
 	如果有必要，请自己添加代码以测试你的函数是否正确。 
     */
+    int vnum, w;
+    VertexType ch, x, y;
+    cin >> vnum;
+    AOENetwork g = createGraph();
+    for (int i = 0; i < vnum; ++i) {
+        cin >> ch;
+        addVertex(g, ch);
+    }
+    while (cin >> x >> y, !(x == '0' && y == '0')) {
+        cin >> w;
+        addEdge(g, x, y, w);
+    }
+    event(g);
+    active(g);
+    cout << pathNum(g) << "\n";
     return 0;
 }
 /*你的提交的代码将被添加在此处，请完成题目所要求的函数的定义*/
@@ -92,6 +106,7 @@ void addEdge(AOENetwork g, VertexType v1, VertexType v2, int w) {
     g->vexs[i].firstEdge = ne;
     g->vexs[j].inDegree++;
     g->edgeNum++;
+    //尾插错误的
     //ENode *ne = new ENode, *p = g->vexs[i].firstEdge;
     //ne->adjVertex = j;
     //ne->weight = w;
@@ -181,6 +196,17 @@ int active(AOENetwork g) {
     }
     return cnt;
 }
+int DFS(AOENetwork g,int x) {
+    if (x == g->vertexNum - 1)return 1;
+    int n = 0;
+    ENode *p = g->vexs[x].firstEdge;
+    while (p != NULL) {
+        if (p->earliest == p->latest)
+            n += DFS(g, p->adjVertex);
+        p = p->nextEdge;
+    }
+    return n;
+}
 int pathNum(AOENetwork g){
-      
+    return DFS(g,0);
 }

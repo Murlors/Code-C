@@ -97,6 +97,7 @@ int main() {
     return 0;
 }
 /*你的提交的代码将被添加在此处，请完成题目所要求的函数的定义*/
+//Kruskal
 struct Edge {
     int x, y, w;
 }tmp;
@@ -203,5 +204,105 @@ int Kruskal(Graph g) {
     }
     if (cnt < g->vertexNum - 1) return -1;
     return ans;
+}
+*/
+//Prim
+int findMin(int lowcost[],int n) {
+    int k = -1, min = INT_MAX;
+    for (int i = 0; i < n; i++) {
+        if (lowcost[i] != 0 && min > lowcost[i]) {
+            min = lowcost[i];
+            k = i;
+        }
+    }
+    return k;
+}
+/*3160
+typedef char VertexType;
+typedef int EdgeType;
+typedef struct {
+    VertexType vexs[MAXVEX]; //顶点表
+    EdgeType edge[MAXVEX][MAXVEX]; //邻接矩阵,即边表
+    int vertexNum,edgeNum;
+}MGraph,*Graph;
+int Prim(Graph g, VertexType u) {
+    int sum = 0, k = locateVertex(g, u), lowcost[MAXVEX];
+    for (int i = 0; i < g->vertexNum; ++i)
+        lowcost[i] = g->edge[k][i];
+    lowcost[k] = 0;//!
+    for (int i = 1; i < g->vertexNum; ++i) {
+        k = findMin(lowcost, g->vertexNum);
+        if (k == -1) return -1;
+        sum += lowcost[k];
+        lowcost[k] = 0;
+        for (int j = 0; j < g->vertexNum; ++j)
+            if (lowcost[j] != 0 && lowcost[j] > g->edge[k][j])
+                lowcost[j] = g->edge[k][j];
+    }
+    return sum;
+}
+*/
+/*3159
+int Prim(Graph g, VertexType u,Graph t) {
+    int i, j, k, sum = 0, lowcost[MAXVEX];
+    ENode *p;
+    addVertex(t, u);
+    VertexType pre = u;
+    for (i = 0; i < g->vertexNum; i++)
+        lowcost[i] = INT_MAX;
+    k = locateVertex(g, u);
+    lowcost[k] = 0;
+    p = g->vexs[k].firstEdge;
+    while (p != NULL) {
+        j = p->adjVertex;
+        lowcost[j] = p->weight;
+        p = p->nextEdge;
+    }
+    for (i = 1; i < g->vertexNum; i++) {
+        k = findMin(lowcost, g->vertexNum);
+        if (k == -1) return -1;
+        sum += lowcost[k];
+        addVertex(t, g->vexs[k].data);
+        addEdge(t, g->vexs[k].data, pre, lowcost[k]);
+        pre = g->vexs[k].data;
+        lowcost[k] = 0;
+        p = g->vexs[k].firstEdge;
+        while (p != NULL) {
+            j = p->adjVertex;
+            if (lowcost[j] != 0 && lowcost[j] > p->weight)
+                lowcost[j] = p->weight;
+            p = p->nextEdge;
+        }
+    }
+    return sum;
+}
+*/
+/*3158
+int Prim(Graph g, VertexType u) {
+    int i, j, k, sum = 0, lowcost[MAXVEX];
+    ENode *p;
+    for (i = 0; i < g->vertexNum; i++) lowcost[i] = INT_MAX;
+    k = locateVertex(g, u);
+    lowcost[k] = 0;
+    p = g->vexs[k].firstEdge;
+    while (p != NULL) {
+        j = p->adjVertex;
+        lowcost[j] = p->weight;
+        p = p->nextEdge;
+    }
+    for (i = 1; i < g->vertexNum; i++) {
+        k = findMin(lowcost, g->vertexNum);
+        if (k == -1) return -1;
+        sum += lowcost[k];
+        lowcost[k] = 0;
+        p = g->vexs[k].firstEdge;
+        while (p != NULL) {
+            j = p->adjVertex;
+            if (lowcost[j] != 0 && lowcost[j] > p->weight)
+                lowcost[j] = p->weight;
+            p = p->nextEdge;
+        }
+    }
+    return sum;
 }
 */
